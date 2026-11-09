@@ -1,0 +1,124 @@
+---
+title: "STAT 240 Final Project Proposal"
+author: "Group ___"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+library(tidyverse)
+```
+
+## Group Members
+
+<!-- Rubric (2 pts): names of ALL group members -->
+
+- Name 1
+- Name 2
+- Name 3
+- Name 4
+
+## Communication Plan
+
+<!--
+Rubric (2 pts): (a) a few weekly times the group can meet; (b) platforms/locations for communication
+- List at least 2-3 specific weekly times (e.g., Tue 7-9 pm, Thu 7-9 pm, Sun afternoon)
+- Where you meet in person (e.g., a campus library) and/or online (e.g., Zoom)
+- Platform for messaging (WeChat / Discord / Teams ...)
+- Platform for sharing files and code (Google Drive / GitHub / Box ...)
+-->
+
+_(Write here.)_
+
+## Question of Interest
+
+<!--
+Rubric (4 pts): (a) question clearly stated; (b) specific enough to be answered by the chosen dataset
+- Question: Is Madison's long-run mean January temperature different in 1995-2024 compared with 1965-1994?
+- Parameters: mu1 = mean January temperature under the 1965-1994 climate; mu2 = same for 1995-2024; interest is in mu2 - mu1
+- Why it is answerable with this dataset: the station has daily TMAX and TMIN since 1939, covering both periods completely; each year gives one January average, so 30 values per period
+- Why January: the winter warming signal in the Midwest is usually strongest, and January falls within one calendar year
+- Why 30 years each: NOAA climate normals also use 30-year periods; equal-length, non-overlapping periods
+-->
+
+_(Write here.)_
+
+## Data Source
+
+<!--
+Rubric (2 pts): a source that lets someone else find and access the data
+- Give the direct download link, the station ID, and the documentation link (below)
+- The short code chunk confirms the data can be read into RStudio (required by the assignment instructions)
+-->
+
+- Daily station data (Madison Dane County Regional Airport, station GHCND:USW00014837): <https://www.ncei.noaa.gov/pub/data/ghcn/daily/by_station/USW00014837.csv.gz>
+- Format documentation: <https://www.ncei.noaa.gov/pub/data/ghcn/daily/readme.txt>
+- Station details: <https://www.ncdc.noaa.gov/cdo-web/datasets/GSOM/stations/GHCND:USW00014837/detail>
+
+```{r read-data}
+raw <- read_csv("../data/USW00014837.csv.gz",
+                col_names = c("id", "date", "element", "value",
+                              "m_flag", "q_flag", "s_flag", "obs_time"),
+                col_types = "cccicccc")
+head(raw)
+```
+
+## Data Description
+
+<!--
+Rubric (4 pts): (a) who collected the data, how, and WHY; (b) meaning of the rows and key variables
+
+Who and how:
+- The National Weather Service (NWS) station at the Madison airport measures daily max/min temperature and other variables with instruments
+- NOAA's National Centers for Environmental Information (NCEI) compiles station data worldwide into the GHCN-Daily dataset and runs quality checks
+- Records at this station begin in 1939
+
+Why:
+- Airport stations record weather for forecasting and aviation safety
+- NOAA archives and standardizes the records so researchers and the public can study long-term climate (e.g., computing 30-year climate normals)
+
+Rows:
+- Raw file: one row = one type of observation on one day (e.g., TMAX on a given date)
+- After tidying for the analysis: one row = one year's January, 60 rows total (30 per period)
+
+Key variables (the raw file has no header; we add column names ourselves):
+- date: observation date, format YYYYMMDD
+- element: type of observation; we use only TMAX (daily max temp) and TMIN (daily min temp)
+- value: the measurement, in tenths of a degree C (e.g., -52 means -5.2 C)
+- q_flag: quality flag; non-missing means it failed a quality check, so we remove it
+- Derived: daily mean = (TMAX + TMIN) / 2; jan_mean = average daily mean for each January; period = "1965-1994" or "1995-2024"
+
+Population (not graded separately, but asked for in the instructions):
+- For each period, all Januaries that could occur under that period's climate; each observed January is one draw from it
+-->
+
+_(Write here.)_
+
+## Planned Graph
+
+<!--
+Rubric (2 pts): description of a key graph that highlights relevant information
+- Type: side-by-side boxplots with one point per year overlaid
+- x-axis: period (1965-1994 / 1995-2024); y-axis: jan_mean (degrees C)
+- What it highlights: how far apart the two group centers are, compared with how spread out each group is
+- Description only; no need to draw it yet
+-->
+
+_(Write here.)_
+
+## Inference Method
+
+<!--
+Rubric (4 pts): (a) name the inference method from class; (b) explain why it fits the data and question
+- Method: inference on a difference of two population means (two-sample t-test, Welch version), plus a 95% confidence interval for mu2 - mu1
+- H0: mu2 - mu1 = 0; Ha: mu2 - mu1 != 0
+Why it fits:
+- The response (jan_mean) is numeric and there are exactly two groups (periods) -> difference in means
+- One value per year: daily temperatures are strongly correlated with nearby days, while Januaries from different years are approximately independent
+- The two periods do not overlap, so the groups are independent of each other
+- n = 30 per group, and each value is itself an average of about 31 days, so the sample means should be approximately normal
+- Welch does not assume the two periods have equal variance
+-->
+
+_(Write here.)_
