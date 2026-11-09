@@ -7,6 +7,7 @@ Group repository for our STAT 240 (Fall 2026) final project. This is the main pl
 ## Initial topic idea: weather change in Madison
 
 **Question of interest**
+
 Is Madison's long-run mean January temperature different in 1995–2024 compared with 1965–1994?
 
 "Long-run mean" means we are making an inference about the underlying climate in each period (a population parameter), not just describing the 30 Januaries we happen to observe.
