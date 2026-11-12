@@ -1,0 +1,76 @@
+---
+title: "STAT 240 Final Project Proposal"
+author: "DIS311: Group 3"
+output: html_document
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, error = TRUE)
+library(tidyverse)
+```
+
+## Group Members
+
+- Xilin Cai
+- Martin LIU
+- Iris DUAN
+- Yaroslav Schevchuk
+
+## Communication Plan
+
+We are currently planning to hold our group meetings during Thursday or Friday, ideally sometime in the afternoon, wrapping up by 6:00 PM. We could meet at either Morgridge Hall or the College Library.
+
+We use GitHub as our platform for work, where we share documents and collaborate. Our communication will take place via in-person meetings or email.
+
+
+## Question of Interest
+
+Is Madison's long-run mean January temperature different in 1995-2024 compared with 1965-1994?
+
+## Data Source
+
+We used US Government Data Catalog to find data sources. It's the GHCN-Daily published by NOAA National Centers for Environmental Information:
+<https://catalog.data.gov/dataset/global-historical-climatology-network-daily-ghcn-daily-version-3?from_hint=eyJxIjoiR0hDTi1EYWlseSIsInNvcnQiOiJyZWxldmFuY2UifQ%3D%3D>
+
+According to the GHCNd Station Inventory, the file number for MADISON DANE CO RGNL AP is USW00014837. We downloaded USW00014837.csv from the NCEI Direct Download page and used it as our dataset.
+
+Like to the download page: <https://www.ncei.noaa.gov/data/global-historical-climatology-network-daily/access/>
+
+Confirm that we can read the data into Rstudio:
+
+
+```{r}
+# Reading the full dataset using the url made knitting slow; so only to confrim that we can access, we just read the first 5 rows and print only 4 columns
+
+weather = read.csv(url("https://www.ncei.noaa.gov/data/global-historical-climatology-network-daily/access/USW00014837.csv"), nrows = 5)
+
+weather[, c("STATION", "DATE", "TMAX", "TMIN")]
+```
+
+## Data Description
+
+- Who originally recorded the data, and what was the method they used?
+
+- What are the key variables in the data set and how are they related to your key questions? (You do not have to describe unused variables.)
+
+- What does a single row of the data set represent?
+
+A single row represents one day of weather observations at the Madison Dane County Regional Airport station.
+
+- If the data is a sample from some larger population, what is that population?
+
+## Planned Graph
+
+We will create side-by-side boxplots of the yearly mean January temperature, with one box for each period. This graph can provide a visual comparison of the yearly mean January temperature between the early and recent periods.
+
+
+## Inference Method
+
+The type of inference method we're going to use is inference on the difference of two population means.
+
+Description: Comparing Madison's mean January temperature in 1995-2024 with 1965-1994. We will test 
+$$
+H_0: \mu_2 - \mu_1 = 0 \quad \text{versus} \quad H_a: \mu_2 - \mu_1 \neq 0
+$$
+using a permutation test (pool the 60 yearly January means, randomly reassign them to the two periods many times, and compute the p-value).
+
