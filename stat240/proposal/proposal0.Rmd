@@ -51,7 +51,11 @@ weather[, c("STATION", "DATE", "TMAX", "TMIN")]
 
 - Who originally recorded the data, and what was the method they used?
 
+Weather observers at Madison Dane County Regional Airport (USW00014837) recorded daily high and low temperatures using on-site instruments. In April 1996, the station began using automated sensors to measure and report these temperatures. NOAA compiled the records in its GHCN-Daily dataset.
+
 - What are the key variables in the data set and how are they related to your key questions? (You do not have to describe unused variables.)
+
+We use DATE to select January observations and split them into two periods: 1965–1994 and 1995–2024. We average the daily highs (TMAX) and lows (TMIN), then calculate one January average per year to compare the two periods.
 
 - What does a single row of the data set represent?
 
