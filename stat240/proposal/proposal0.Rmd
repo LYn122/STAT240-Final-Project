@@ -59,6 +59,9 @@ A single row represents one day of weather observations at the Madison Dane Coun
 
 - If the data is a sample from some larger population, what is that population?
 
+If we consider our dataset a sample, the larger population would be all daily weather observations in Madison, WI, including days outside the time period covered by our dataset.
+
+
 ## Planned Graph
 
 We will create side-by-side boxplots of the yearly mean January temperature, with one box for each period. This graph can provide a visual comparison of the yearly mean January temperature between the early and recent periods.
